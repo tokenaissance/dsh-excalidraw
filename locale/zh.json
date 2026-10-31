@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Excalidraw 设计图",
+    "description": "在侧边栏渲染 Excalidraw 架构图，并从 Excalidraw+ 刷新。"
+  }
+}

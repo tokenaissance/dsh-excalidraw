@@ -1,0 +1,16 @@
+# dsh-excalidraw bundle patch
+#
+# Installed with:
+#   dsh plugin --profile <name> add <path-to-this-directory>
+#
+# Host half: registers the /excalidraw HTTP routes, the `excalidraw_refresh`
+# tool and the scene store under <cwd>/.dsh/excalidraw/.
+# Client half: registers the "Design" sidebar tab that renders those scenes.
+- insert:
+    - id: excalidraw
+      name: 'dsh-excalidraw'
+      config:
+        mcpUrl: https://api.excalidraw.com/api/v1/mcp
+        scenesDir: .dsh/excalidraw
+        pollIntervalMs: 1500
+        autoOpen: true

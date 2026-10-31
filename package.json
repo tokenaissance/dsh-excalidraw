@@ -1,0 +1,69 @@
+{
+  "name": "dsh-excalidraw",
+  "version": "0.1.0",
+  "description": "Live Excalidraw architecture scenes rendered in the DSH sidebar",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "lib/**/*.js",
+    "src/client.mjs",
+    "src/renderer.mjs",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "docs/**",
+    "src/fonts-data.mjs",
+    "fonts/**",
+    "fonts/LICENSE-*",
+    "fonts/README.md",
+    "test/**",
+    "scripts/**",
+    "LICENSE",
+    "TUTORIAL.md",
+    "AGENTS.md"
+  ],
+  "scripts": {
+    "build": "node scripts/gen-fonts-data.mjs && node scripts/build-client.mjs",
+    "test": "node scripts/gen-fonts-data.mjs --check && node --test test/",
+    "render": "node scripts/render-scene.mjs",
+    "verify": "node scripts/gen-fonts-data.mjs --check && node --test test/ && node scripts/build-client.mjs && node --test test/client.test.mjs",
+    "prepack": "node scripts/gen-fonts-data.mjs && node scripts/build-client.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": [
+        "./cordis.patch.yml"
+      ]
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-locale"
+      ]
+    }
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.19",
+    "dsh": ">=0.2.1-rc.1 <0.3.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/schemastery": "*",
+    "@deepseek-ai/dsh-tools": "*",
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/dsh-session": "*"
+  },
+  "icon": "./icon.svg"
+}

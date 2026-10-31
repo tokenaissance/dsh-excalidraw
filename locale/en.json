@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Excalidraw Scenes",
+    "description": "Renders Excalidraw architecture scenes in the sidebar and refreshes them from Excalidraw+."
+  }
+}
