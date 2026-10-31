@@ -1,9 +1,8 @@
 {
   "name": "dsh-excalidraw",
   "version": "0.1.0",
-  "description": "Live Excalidraw architecture scenes rendered in the DSH sidebar",
+  "description": "Live Excalidraw architecture scenes rendered in DSH (sidebar tab or native conversation view), refreshed from Excalidraw+ over MCP.",
   "type": "module",
-  "private": true,
   "exports": {
     ".": "./index.js",
     "./client": "./client.js",
@@ -31,7 +30,8 @@
     "scripts/**",
     "LICENSE",
     "TUTORIAL.md",
-    "AGENTS.md"
+    "AGENTS.md",
+    "THIRD_PARTY_NOTICES.md"
   ],
   "scripts": {
     "build": "node scripts/gen-fonts-data.mjs && node scripts/build-client.mjs",
@@ -65,5 +65,18 @@
     "@deepseek-ai/cordis": "*",
     "@deepseek-ai/dsh-session": "*"
   },
-  "icon": "./icon.svg"
+  "icon": "./icon.svg",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek",
+    "deepseek-harness",
+    "excalidraw",
+    "diagram",
+    "architecture",
+    "mcp"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

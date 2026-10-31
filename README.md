@@ -145,6 +145,21 @@ for the normative wire contract, and [docs/HOST-NOTES.md](docs/HOST-NOTES.md) /
 [docs/CLIENT-NOTES.md](docs/CLIENT-NOTES.md) / [docs/RENDERER-NOTES.md](docs/RENDERER-NOTES.md)
 for per-half implementation notes.
 
+## Publish / install from elsewhere
+
+- **Any DSH:** Settings → Plugins → *Add plugin* accepts a local directory, a
+  `.tgz`, or a Git URL; the CLI equivalent is
+  `dsh plugin --profile desktop add <source>`.
+- **npm:** `npm publish --access public`, then install by name
+  (`dsh plugin --profile desktop add dsh-excalidraw`).
+- **Community catalog:** one YAML entry in
+  [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
+  (`data/plugins/<owner>__<repo>.yml`); the market and Plugins → Discover pick
+  it up after merge.
+
+See [docs/PUBLISHING.md](docs/PUBLISHING.md) for the exact commands, the
+catalog entry, and the pre-announcement checks.
+
 ## Tests
 
 ```sh
