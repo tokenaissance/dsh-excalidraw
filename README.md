@@ -21,6 +21,16 @@ Design drawn in Excalidraw before a line of code:
 [architecture](https://app.excalidraw.com/s/9Zq6XgRe98z/6gbUPPB8Q7X) ·
 [sidebar wireframe](https://app.excalidraw.com/s/9Zq6XgRe98z/Aw55m5vJxYJ)
 
+## Preview
+
+The **Excalidraw** view on a stock DSH, beside Chat and Trajectory:
+
+![Excalidraw view on a stock DSH](https://raw.githubusercontent.com/tokenaissance/dsh-excalidraw/main/assets/preview-stock.png)
+
+The same scene as the **Excalidraw** tab in dsh-better-sidebar:
+
+![Excalidraw sidebar tab](https://raw.githubusercontent.com/tokenaissance/dsh-excalidraw/main/assets/preview-sidebar.png)
+
 ## Install
 
 ```sh
