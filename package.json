@@ -78,5 +78,13 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tokenaissance/dsh-excalidraw.git"
+  },
+  "homepage": "https://github.com/tokenaissance/dsh-excalidraw#readme",
+  "bugs": {
+    "url": "https://github.com/tokenaissance/dsh-excalidraw/issues"
   }
 }
