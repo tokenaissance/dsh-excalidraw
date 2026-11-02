@@ -52,7 +52,12 @@ layerfs fs read main /dsh-excalidraw/...  # or mount a Workspace and copy the tr
 dsh plugin --profile desktop add /path/to/exported/dsh-excalidraw
 ```
 
-**Prerequisite: an Excalidraw+ MCP token.** Pulling a scene from Excalidraw+
+**Two ways in.** *Local import* works with no account at all: point
+`excalidraw_import` at a `.excalidraw`/`.json` file in the workspace, or hand it
+an inline Excalidraw JSON document, and the view renders it. *Excalidraw+ refresh*
+needs an account and a token (below).
+
+**Refresh prerequisite: an Excalidraw+ MCP token.** Pulling a scene from Excalidraw+
 (`excalidraw_refresh`, the tab's Refresh button) needs an Excalidraw+ account and
 its MCP bearer token — set `mcpToken` on the plugin row, or `EXCALIDRAW_MCP_TOKEN`,
 or keep the `Authorization: Bearer …` header your profile already has for the
@@ -116,6 +121,7 @@ Extras that come with the same sidebar service:
 | Tool | Arguments | Effect |
 | --- | --- | --- |
 | `excalidraw_refresh` | `{ sceneId?, name?, slug? }` | pull a scene from Excalidraw+ into the workspace store; returns `{ ok, slug, file, sceneId, elements, revision, opened }` |
+| `excalidraw_import` | `{ path?, scene?, name?, slug? }` | store a scene that already exists locally — a `.excalidraw`/`.json` file **inside the workspace**, or an inline Excalidraw JSON document — **no Excalidraw+ account or token** |
 | `excalidraw_open` | `{ slug? }` | focus the Excalidraw tab for an already-stored scene |
 | `excalidraw_export` | `{ slug?, format? }` | write the scene as `<scenesDir>/<slug>.svg` (PNG comes from the tab's button, which rasterises in the browser) |
 
@@ -163,6 +169,17 @@ Read [docs/DESIGN.md](docs/DESIGN.md) for the design, [docs/CONTRACT.md](docs/CO
 for the normative wire contract, and [docs/HOST-NOTES.md](docs/HOST-NOTES.md) /
 [docs/CLIENT-NOTES.md](docs/CLIENT-NOTES.md) / [docs/RENDERER-NOTES.md](docs/RENDERER-NOTES.md)
 for per-half implementation notes.
+
+## No Excalidraw+ account?
+
+```text
+agent ── excalidraw_import { path: "docs/flow.excalidraw" } ──▶ <cwd>/.dsh/excalidraw/flow.excalidraw
+agent ── excalidraw_import { scene: { type: "excalidraw", elements: [...] } } ──▶ same store
+```
+
+Either form stores the scene locally and shows it in the **Excalidraw** view; the
+file viewer opens `.excalidraw` files directly as well. Only `excalidraw_refresh`
+(the pull from Excalidraw+) requires the token.
 
 ## Publish / install from elsewhere
 

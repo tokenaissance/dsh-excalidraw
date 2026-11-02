@@ -1,6 +1,6 @@
 /**
  * GENERATED FILE — edit src/renderer.mjs and src/client.mjs, then `npm run build`.
- * sources-signature: be58caaea87fb1f7
+ * sources-signature: fc747c29c46ed4a0
  * Registers the dsh-excalidraw client half into DSH's browser module table.
  */
 window.__ModuleLoader__.load({
@@ -1137,7 +1137,7 @@ function createPlugin(React) {
       description: 'Live Excalidraw scene of this workspace',
       refresh: 'Refresh',
       refreshTitle: 'Pull the newest scene from Excalidraw+',
-      empty: 'No scene yet. Ask the agent to refresh the architecture diagram.',
+      empty: 'No scene yet. Ask the agent to refresh from Excalidraw+ or import a local scene.',
       loading: 'Loading scene…',
       error: 'Could not load the scene',
       updated: 'Updated',
@@ -1150,7 +1150,7 @@ function createPlugin(React) {
       exportPngTitle: 'Download the scene as PNG (up to 2x, capped at 2048 px)',
       exportFailed: 'Export failed',
       follow: 'Follow',
-      emptyHint: 'Ask the agent to refresh a scene first',
+      emptyHint: 'Ask the agent to refresh or import a scene first',
       canvasHint: 'Drag to pan · ⌘/Ctrl + wheel or pinch to zoom · Shift-drag to select',
       selected: 'selected',
       zoomIn: 'Zoom in',
@@ -1163,7 +1163,7 @@ function createPlugin(React) {
       description: '当前工作区的实时 Excalidraw 场景',
       refresh: '刷新',
       refreshTitle: '从 Excalidraw+ 拉取最新场景',
-      empty: '还没有场景。让 agent 刷新一次架构图即可。',
+      empty: '还没有场景。让 agent 从 Excalidraw+ 刷新，或导入本地场景。',
       loading: '正在加载场景…',
       error: '场景加载失败',
       updated: '更新于',
@@ -1176,7 +1176,7 @@ function createPlugin(React) {
       exportPngTitle: '把当前场景下载为 PNG（最多 2 倍，长边上限 2048 px）',
       exportFailed: '导出失败',
       follow: '跟随最新',
-      emptyHint: '先让 agent 刷新一次场景',
+      emptyHint: '先让 agent 刷新或导入一次场景',
       canvasHint: '拖动平移 · ⌘/Ctrl + 滚轮或双指缩放 · Shift + 拖动框选',
       selected: '已选中',
       zoomIn: '放大',

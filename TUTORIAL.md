@@ -8,7 +8,16 @@
 
    Restart DSH. The plugin registers its host routes and its client half.
 
-2. **Give it a token.** The plugin resolves Excalidraw+ MCP credentials in this
+2. **No Excalidraw+ account? Import a local scene instead.** Ask the agent to
+   `excalidraw_import` a `.excalidraw`/`.json` file from the workspace, or to hand
+   it an inline Excalidraw JSON document:
+
+   > "把 docs/flow.excalidraw 导入到 Excalidraw 视图"
+
+   That stores the scene under `.dsh/excalidraw/` and the **Excalidraw** view
+   renders it — no token involved. Skip the next step.
+
+3. **Or give it a token (for Excalidraw+ refresh).** The plugin resolves Excalidraw+ MCP credentials in this
    order — the plugin row's `mcpToken` wins, then `EXCALIDRAW_MCP_TOKEN`, then the
    `Authorization` header your profile keeps for the `excalidraw` MCP server:
 
@@ -20,7 +29,7 @@
    `Authorization: Bearer …` header your profile already has for the
    `excalidraw` MCP server.
 
-3. **Ask your agent to pull a scene.** In a session whose workspace is where you
+4. **Ask your agent to pull a scene.** In a session whose workspace is where you
    want the files:
 
    > "把这张图刷新到 Excalidraw：https://app.excalidraw.com/s/…/<sceneId>"
@@ -28,7 +37,7 @@
    The agent calls `excalidraw_refresh`; the scene lands in
    `<workspace>/.dsh/excalidraw/<slug>.excalidraw` and the **Excalidraw** view opens.
 
-4. **Look at it.** Two ways, depending on what your profile has:
+5. **Look at it.** Two ways, depending on what your profile has:
 
    - a profile with **dsh-better-sidebar**: the **Excalidraw 图 / Excalidraw** tab in the
      right sidebar;

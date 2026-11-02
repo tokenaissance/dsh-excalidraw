@@ -1,6 +1,6 @@
 {
   "name": "dsh-excalidraw",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Live Excalidraw architecture scenes rendered in DSH (sidebar tab or native conversation view), refreshed from Excalidraw+ over MCP.",
   "type": "module",
   "exports": {

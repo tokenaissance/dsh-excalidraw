@@ -209,6 +209,9 @@ window.__ModuleLoader__.load({
   content; better-sidebar refuses to read files above its own 5 MiB editable
   limit, so a scene that large opens with a load error even though the Excalidraw tab
   can still render it from the store.
+- `excalidraw_import` reads a file only when it resolves inside the session
+  workspace, only for `.excalidraw`/`.json`, bounded by `maxSceneBytes`, and
+  never contacts the MCP endpoint. It accepts `path` XOR `scene`.
 - The scene surface is preview-only: drag/wheel pans, ⌘/Ctrl+wheel and pinch
   zoom at the cursor, click selects the topmost element, Shift+click toggles,
   Shift+drag marquees, ⌘/Ctrl+A selects all, and `Esc` clears. Selection is

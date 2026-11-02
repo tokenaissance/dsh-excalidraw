@@ -8,7 +8,7 @@
 import { register } from 'node:module'
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
@@ -172,7 +172,7 @@ test('the plugin exports its cordis identity, Config schema and apply', () => {
   ])
 })
 
-test('apply registers seven exact routes, the font prefix and three tools', async (t) => {
+test('apply registers seven exact routes, the font prefix and four tools', async (t) => {
   const { state } = await mount(t)
   assert.equal(state.routes.length, 8)
   const fontRoute = state.routes.find((route) => route.kind === 'prefix')
@@ -187,7 +187,7 @@ test('apply registers seven exact routes, the font prefix and three tools', asyn
     assert.equal(route.kind, 'exact')
     assert.equal(typeof route.handler, 'function')
   }
-  assert.deepEqual(state.tools.map((definition) => definition.name).sort(), ['excalidraw_export', 'excalidraw_open', 'excalidraw_refresh'])
+  assert.deepEqual(state.tools.map((definition) => definition.name).sort(), ['excalidraw_export', 'excalidraw_import', 'excalidraw_open', 'excalidraw_refresh'])
   for (const definition of state.tools) {
     assert.equal(typeof definition.description, 'string')
     assert.ok(definition.description.length > 40)
@@ -199,13 +199,14 @@ test('apply registers seven exact routes, the font prefix and three tools', asyn
   // The refresh tool's parameters are exactly the CONTRACT §4 input.
   assert.deepEqual(Object.keys(toolOf(state, 'excalidraw_refresh').parameters).sort(), ['name', 'sceneId', 'slug'])
   assert.deepEqual(Object.keys(toolOf(state, 'excalidraw_open').parameters), ['slug'])
+  assert.deepEqual(Object.keys(toolOf(state, 'excalidraw_import').parameters).sort(), ['name', 'path', 'scene', 'slug'])
   assert.deepEqual(Object.keys(toolOf(state, 'excalidraw_export').parameters).sort(), ['format', 'slug'])
 })
 
 test('disposing every effect empties the registries', async (t) => {
   const { state } = await mount(t)
   assert.equal(state.routes.length, 8)
-  assert.equal(state.tools.length, 3)
+  assert.equal(state.tools.length, 4)
   for (const disposer of state.disposers.reverse()) disposer()
   assert.deepEqual(state.routes, [])
   assert.deepEqual(state.tools, [])
@@ -984,4 +985,57 @@ test('a user-supplied font is embedded in an export when the scene names it (rou
   assert.match(svg, /font-family:'Excalifont';src:url\(data:font\/woff2;base64,d09GMi11c2VyLWV4Y2FsaWZvbnQ=/, 'the user font bytes are embedded')
   assert.match(svg, /font-family:'Virgil'/, 'the bundled fallback stays too')
   assert.match(svg, /Embedded fonts: Excalifont; Virgil/, 'the notice names both')
+})
+
+test('excalidraw_import stores a local scene without any token or network (round 21)', async (t) => {
+  const { state, cwd } = await mount(t, { config: { mcpToken: '' } })
+  const importTool = toolOf(state, 'excalidraw_import')
+  const document = {
+    type: 'excalidraw',
+    elements: [
+      { id: 'r1', type: 'rectangle', x: 0, y: 0, width: 120, height: 60 },
+      { id: 't1', type: 'text', x: 10, y: 10, width: 60, height: 20, text: 'hi', fontFamily: 5 },
+    ],
+  }
+  const imported = await importTool.execute({ scene: document, name: 'Local diagram' }, { signal: { throwIfAborted() {} } })
+  assert.equal(imported.ok, true, JSON.stringify(imported))
+  assert.equal(imported.slug, 'local-diagram')
+  assert.equal(imported.elements, 2)
+  assert.ok(imported.revision > 0)
+  assert.equal(imported.opened, true, 'autoOpen records the focus pointer')
+  // The file is a real Excalidraw document on disk, and the export path sees it.
+  const stored = JSON.parse(await readFile(join(cwd, '.dsh/excalidraw/local-diagram.excalidraw'), 'utf8'))
+  assert.equal(stored.elements.length, 2)
+  const exported = await toolOf(state, 'excalidraw_export').execute({ slug: 'local-diagram' }, { signal: { throwIfAborted() {} } })
+  assert.equal(exported.ok, true, JSON.stringify(exported))
+  assert.ok((await readFile(join(cwd, '.dsh/excalidraw/local-diagram.svg'), 'utf8')).includes('<svg'))
+})
+
+test('excalidraw_import reads a workspace file and refuses bad input (round 21)', async (t) => {
+  const { state, cwd } = await mount(t)
+  const importTool = toolOf(state, 'excalidraw_import')
+  const dir = join(cwd, 'diagrams')
+  await mkdir(dir, { recursive: true })
+  await writeFile(join(dir, 'flow.excalidraw'), JSON.stringify({ type: 'excalidraw', elements: [{ id: 'a', type: 'rectangle', x: 0, y: 0, width: 10, height: 10 }] }))
+  const fromFile = await importTool.execute({ path: 'diagrams/flow.excalidraw' }, { signal: { throwIfAborted() {} } })
+  assert.equal(fromFile.ok, true, JSON.stringify(fromFile))
+  assert.equal(fromFile.slug, 'flow')
+  assert.equal(fromFile.elements, 1)
+
+  // Nothing to import, or two sources at once.
+  assert.equal((await importTool.execute({}, {})).error, 'bad-request')
+  assert.equal((await importTool.execute({ path: 'diagrams/flow.excalidraw', scene: { elements: [] } }, {})).error, 'bad-request')
+  // A malformed / non-scene document.
+  assert.equal((await importTool.execute({ scene: { elements: 'nope' } }, {})).error, 'bad-request')
+  await writeFile(join(cwd, 'broken.json'), '{not json')
+  assert.equal((await importTool.execute({ path: 'broken.json' }, {})).error, 'bad-request')
+  // A path outside the workspace is refused, absolute or relative.
+  assert.equal((await importTool.execute({ path: '/etc/passwd' }, {})).error, 'bad-request')
+  assert.equal((await importTool.execute({ path: '../../escape.excalidraw' }, {})).error, 'bad-request')
+  // A missing file and an over-sized file are reported without writing anything.
+  assert.equal((await importTool.execute({ path: 'diagrams/nope.excalidraw' }, {})).error, 'bad-request')
+  const limited = await mount(t, { config: { maxSceneBytes: 1024 } })
+  const limitedImport = toolOf(limited.state, 'excalidraw_import')
+  await writeFile(join(limited.cwd, 'huge.excalidraw'), 'x'.repeat(2048))
+  assert.equal((await limitedImport.execute({ path: 'huge.excalidraw' }, {})).error, 'scene-too-large')
 })
