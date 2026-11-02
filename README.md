@@ -52,6 +52,15 @@ layerfs fs read main /dsh-excalidraw/...  # or mount a Workspace and copy the tr
 dsh plugin --profile desktop add /path/to/exported/dsh-excalidraw
 ```
 
+**Prerequisite: an Excalidraw+ MCP token.** Pulling a scene from Excalidraw+
+(`excalidraw_refresh`, the tab's Refresh button) needs an Excalidraw+ account and
+its MCP bearer token — set `mcpToken` on the plugin row, or `EXCALIDRAW_MCP_TOKEN`,
+or keep the `Authorization: Bearer …` header your profile already has for the
+`excalidraw` MCP server; when empty, the tool fails at the MCP endpoint. Without a
+token the viewer still works read-only for what is already local: the
+`.excalidraw` file viewer opens any scene file, and the Excalidraw view renders
+scenes already present in `<workspace>/.dsh/excalidraw/`.
+
 Requirements: DSH 0.2.1-rc.1+ (the Excalidraw view renders on DSH's own
 `conversation.view` slot, so **no third-party sidebar is required**). With
 [dsh-better-sidebar](https://github.com/omdsh-dev/DSH-better-sidebar) 0.28+ you
