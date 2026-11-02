@@ -62,6 +62,15 @@ dsh plugin --profile desktop add dsh-excalidraw
 # or: Settings → Plugins → Add plugin → dsh-excalidraw
 ```
 
+pnpm 11 applies a `minimumReleaseAge` window (about a day) to newly published
+versions, so a plain `add dsh-excalidraw` resolves the previous release right
+after a publish. To take a fresh version immediately, pin it — pnpm then adds its
+own `minimumReleaseAgeExclude` entry for that exact version:
+
+```sh
+dsh plugin --profile desktop add dsh-excalidraw@0.1.1
+```
+
 ## 4. Get listed in the community catalog
 
 The catalog behind **Plugins → Discover** and [dsh-market](https://github.com/dsh-market/dsh-market)
